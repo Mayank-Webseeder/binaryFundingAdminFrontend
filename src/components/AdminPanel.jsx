@@ -31,11 +31,17 @@ const AdminPanel = () => {
           </button>
         </div> */}
         <nav className="p-4 space-y-2">
+        <button className="block w-full text-left p-2 rounded hover:bg-[#0f6dd3]">
+            <div className="flex items-center gap-2">
+              All Users
+            </div>
+          </button>
           <button className="block w-full text-left p-2 rounded hover:bg-[#0f6dd3]">
             <div className="flex items-center gap-2">
               <IoSettingsOutline /> Settings
             </div>
           </button>
+
           {/* <button className="block w-full text-left p-2 rounded hover:bg-[#0f6dd3]">
             <div className="flex items-center gap-2">
               <MdOutlineFeedback /> Feedback
@@ -53,7 +59,7 @@ const AdminPanel = () => {
           </button> */}
         </nav>
 
-        <div className="p-4 space-y-2 mt-[450px]">
+        <div className="p-4 space-y-2 mt-[400px]">
           <button className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]">
             <div className="ml-10 flex items-center gap-2">
               <FaBell />  Notifications
