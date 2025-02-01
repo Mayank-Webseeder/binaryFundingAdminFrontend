@@ -1,12 +1,22 @@
 import React from "react";
 import { IoSettingsOutline } from "react-icons/io5";
 import { MdOutlineFeedback, MdOutlineShortcut } from "react-icons/md";
-import { IoIosHelpCircleOutline , IoIosLogOut} from "react-icons/io";
+import { IoIosHelpCircleOutline, IoIosLogOut } from "react-icons/io";
 import { useSearchParams } from "react-router-dom";
-import { FaBell } from "react-icons/fa"; 
+import { FaBell } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const AdminPanel = () => {
+  const navigate = useNavigate();
   const pathName = useSearchParams();
+
+  const handleLogout = () => {
+    const logout = window.confirm("Are you sure you want to LogOut?");
+    if (logout) {
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">
@@ -46,12 +56,15 @@ const AdminPanel = () => {
         <div className="p-4 space-y-2 mt-[450px]">
           <button className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]">
             <div className="ml-10 flex items-center gap-2">
-              <FaBell/>  Notifications
+              <FaBell />  Notifications
             </div>
           </button>
-          <button className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]">
+          <button
+            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            onClick={handleLogout}
+          >
             <div className="ml-10 flex items-center gap-2">
-            <IoIosLogOut /> Logout
+              <IoIosLogOut /> Logout
             </div>
           </button>
         </div>

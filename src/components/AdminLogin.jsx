@@ -1,15 +1,35 @@
 import React, { useState } from "react";
-import { Route, Routes, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSendOTP = () => {
-    // Simulate OTP sending (replace with actual API call)
-    console.log("OTP sent to", email);
-    navigate("/otp");
+  const handleSendOTP = async () => {
+    setError(null);
+    setLoading(true);
+
+    try {
+      const response = await axios.post("http://localhost:4000/api/v1/user/loginAdmin", {
+        email,
+        password,
+      });
+
+      if (response.data.success) {
+        localStorage.setItem("adminEmail", email);
+        navigate("/otp");
+      } else {
+        setError(response.data.message);
+      }
+    } catch (error) {
+      setError(error.response?.data?.message || "Something went wrong.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -18,7 +38,7 @@ const AdminLogin = () => {
         <h2 className="text-2xl font-bold text-[#0f6dd3] mb-6">Admin Login</h2>
         <input
           type="email"
-          placeholder="Enter email"
+          placeholder="Enter Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-3 rounded bg-gray-800 text-white mb-6 focus:outline-none focus:ring-2 focus:ring-[#0f6dd3]"
