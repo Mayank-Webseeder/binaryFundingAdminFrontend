@@ -3,6 +3,7 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
   const handleSendOTP = () => {
@@ -22,6 +23,15 @@ const AdminLogin = () => {
           onChange={(e) => setEmail(e.target.value)}
           className="w-full p-3 rounded bg-gray-800 text-white mb-6 focus:outline-none focus:ring-2 focus:ring-[#0f6dd3]"
         />
+
+        <input
+          type="password"
+          placeholder="Enter Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="w-full p-3 rounded bg-gray-800 text-white mb-6 focus:outline-none focus:ring-2 focus:ring-[#0f6dd3]"
+        />
+
         <button
           onClick={handleSendOTP}
           className="w-full py-3 bg-[#0f6dd3] text-white rounded-lg hover:bg-blue-700 transition duration-300"
