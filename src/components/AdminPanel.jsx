@@ -19,17 +19,13 @@ const AdminPanel = () => {
   };
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-black text-white">
+    <div className="flex flex-col md:flex-row bg-black text-white">
       {/* Sidebar */}
-      <aside className="w-full md:w-64 bg-gray-900 shadow-lg">
+
+      {/* <aside className="w-full md:w-64 bg-gray-900 shadow-lg">
         <div className="p-6">
           <h1 className="text-xl font-bold text-[#0f6dd3]">Admin Panel</h1>
         </div>
-        {/* <div className="p-6">
-          <button className="w-full py-2 px-4 bg-[#0f6dd3] text-white rounded-lg hover:bg-[#0f6dd3]">
-            All Users
-          </button>
-        </div> */}
         <nav className="p-4 space-y-2">
         <button className="block w-full text-left p-2 rounded hover:bg-[#0f6dd3]">
             <div className="flex items-center gap-2">
@@ -41,22 +37,6 @@ const AdminPanel = () => {
               <IoSettingsOutline /> Settings
             </div>
           </button>
-
-          {/* <button className="block w-full text-left p-2 rounded hover:bg-[#0f6dd3]">
-            <div className="flex items-center gap-2">
-              <MdOutlineFeedback /> Feedback
-            </div>
-          </button>
-          <button className="block w-full text-left p-2 rounded hover:bg-[#0f6dd3]">
-            <div className="flex items-center gap-2">
-              <IoIosHelpCircleOutline /> Help
-            </div>
-          </button>
-          <button className="block w-full text-left p-2 rounded hover:bg-[#0f6dd3]">
-            <div className="flex items-center gap-2">
-              <MdOutlineShortcut /> Shortcuts
-            </div>
-          </button> */}
         </nav>
 
         <div className="p-4 space-y-2 mt-[400px]">
@@ -74,7 +54,7 @@ const AdminPanel = () => {
             </div>
           </button>
         </div>
-      </aside>
+      </aside> */}
 
       {/* Main Content */}
       <main className="flex-1 p-6">
