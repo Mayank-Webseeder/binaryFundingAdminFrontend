@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
-import AdminPanel from "./components/AdminPanel"
+import AdminPanel from "./components/AllUsers"
 import AdminLogin from './components/AdminLogin';
 import OtpVerification from "./components/OtpVerification"
 import SettingsPage from './components/SettingsPage';
 import SideBar from './components/SideBar';
+import Dashboard from './components/Dashboard';
 
 const Layout = ({ children }) => {
   return (
@@ -18,30 +19,18 @@ const Layout = ({ children }) => {
 };
 
 function App() {
-  
-  return (
-    // <div className="min-h-screen bg-black">
-    //   <Routes>
-    //       <Route path="/" element={<AdminPanel/>} />
-    //       <Route path='/login' element = {<AdminLogin/>} />
-    //       <Route path='/otp' element = {<OtpVerification/>} />
-    //       <Route path='/settings' element = {<SettingsPage/>} />
-    //       <Route path='/sidebar' element = {<SideBar/>} />
-    //   </Routes>
-    // </div>
 
+  return (
     <Routes>
-      {/* Routes without Sidebar */}
       <Route path="/login" element={<AdminLogin />} />
       <Route path="/otp" element={<OtpVerification />} />
-
-      {/* Routes with Sidebar */}
       <Route
         path="/*"
         element={
           <Layout>
             <Routes>
-              <Route path="/" element={<AdminPanel />} />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/allUsers" element={<AdminPanel />} />
               <Route path="/settings" element={<SettingsPage />} />
             </Routes>
           </Layout>
