@@ -24,7 +24,7 @@ const OtpVerification = () => {
         email,
         otp,
       });
-
+      localStorage.setItem("token", response.data.token);
       if (response.data.success) {
         navigate("/");
       } else {

@@ -18,7 +18,6 @@ const AdminLogin = () => {
                 email,
                 password,
             });
-
             if (response.data.success) {
                 localStorage.setItem("adminEmail", email);
                 navigate("/otp");

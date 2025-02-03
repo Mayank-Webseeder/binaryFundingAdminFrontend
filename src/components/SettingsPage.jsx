@@ -1,7 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Upload, Trash2 } from 'lucide-react';
+import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
 
 const SettingsPage = () => {
+  const localStorageToken = localStorage.getItem("token");
+  const decodedToken = jwtDecode(localStorageToken);
+  const [id, setId] = useState();
+
+  useEffect(() => {
+    setId(decodedToken.id);
+  }, [decodedToken.id])
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -12,6 +22,27 @@ const SettingsPage = () => {
     confirmPassword: ''
   });
 
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:4000/api/v1/user/getAdminById/${id}`);
+        setFormData(prevState => ({
+          ...prevState,
+          firstName: response.data.user.firstName,
+          lastName: response.data.user.lastName,
+          email: response.data.user.email,
+          phone: response.data.user.phone || ''
+        }));
+      } catch (error) {
+        console.error("Error fetching user data:", error);
+      }
+    };
+
+    if (id) {
+      fetchUserData();
+    }
+  }, [id]);
+
   const handleChange = (e) => {
     setFormData({
       ...formData,
@@ -19,19 +50,38 @@ const SettingsPage = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
-  };
 
-  const handleDeleteAccount = () => {
-    const confirm = window.confirm(
-      'Are you sure you want to delete your account? This action cannot be undone.'
-    );
-    if (confirm) {
-      // Handle account deletion
-      console.log('Account deleted');
+    if (formData.newPassword !== formData.confirmPassword) {
+      alert("New passwords do not match.");
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:4000/api/v1/user/adminChangePassword", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userId: id,
+          oldPassword: formData.currentPassword,
+          newPassword: formData.newPassword,
+          confirmPassword: formData.confirmPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Password updated successfully!");
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error("Error updating password:", error);
+      alert("An error occurred while updating the password.");
     }
   };
 
@@ -106,7 +156,7 @@ const SettingsPage = () => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Phone (Optional)</label>
+            <label className="block text-sm font-medium mb-2">Phone</label>
             <input
               type="tel"
               name="phone"

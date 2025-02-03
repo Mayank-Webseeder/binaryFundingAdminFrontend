@@ -1,6 +1,38 @@
-import React from 'react'
+import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import axios from "axios";
 
 export default function Dashboard() {
+    const localStorageToken = localStorage.getItem("token");
+    const decodedToken = jwtDecode(localStorageToken);
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            try {
+                const response = await axios.get("http://localhost:4000/api/v1/user/getAllUser");
+                console.log(response.data, "response.data");
+                if (response.data.success) {
+                    setUsers(response.data.user);
+                } else {
+                    setError("Failed to fetch users.");
+                }
+            } catch (err) {
+                setError("Error fetching users. Please try again.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchUsers();
+    }, []);
+
+    // Count active and inactive users
+    const activeUsers = users.filter(user => user.status === "active").length;
+    const inactiveUsers = users.filter(user => user.status === "inActive").length;
+
     return (
         <>
             <div className="flex flex-col md:flex-row bg-black text-white">
@@ -8,16 +40,15 @@ export default function Dashboard() {
                 <main className="flex-1 p-6">
                     {/* Welcome Section */}
                     <header className="mb-6">
-                        <h2 className="text-2xl font-bold text-[#0f6dd3]">Welcome, Admin</h2>
-                        <p className="text-gray-400">Here's what's been happening in the last 7 days.</p>
+                        <h2 className="text-2xl font-bold text-[#0f6dd3]">Welcome, {decodedToken?.firstName}</h2>
                     </header>
 
                     {/* Stats Cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                         {[
-                            { label: "Users", count: "24,000" },
-                            { label: "Pandits", count: "1,200" },
-                            { label: "Kathabachaks", count: "2,200" },
+                            { label: "Active Users", count: activeUsers },
+                            { label: "InActive Users", count: inactiveUsers },
+                            { label: "", count: "" },
                         ].map((stat, index) => (
                             <div key={index} className="p-4 bg-gray-800 shadow rounded-lg text-center">
                                 <h3 className="text-gray-400">{stat.label}</h3>
