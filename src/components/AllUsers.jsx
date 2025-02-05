@@ -266,7 +266,7 @@ const AllUsers = () => {
                   </select>
                   <button
                     type="submit"
-                    className="bg-[#F8D9B3] text-[#111322] py-2 px-6 rounded-full font-semibold hover:bg-[#E6C89A] transition"
+                    className="bg-blue-500 text-[#111322] py-2 px-6 rounded-xl font-semibold hover:bg-blue-400 transition"
                   >
                     Update User
                   </button>

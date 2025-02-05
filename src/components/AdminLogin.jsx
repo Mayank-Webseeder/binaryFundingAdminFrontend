@@ -32,39 +32,58 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-b from-blue-950 to-black flex justify-center items-center p-6">
-            <div
-                className="bg-[#121212]/80 p-8 rounded-lg shadow-lg w-full max-w-md text-center"
-                style={{
-                    background:
-                        "linear-gradient(145deg, rgba(18,18,18,0.9) 0%, rgba(26,26,26,0.9) 100%)",
-                    boxShadow: "0 0 20px 0 #4C9BFF20",
-                    border: "1px solid #4C9BFF",
-                }}
-            >
-                <h2 className="text-3xl font-bold text-white mb-8 mt-10">Admin Login</h2>
-                <input
-                    type="email"
-                    placeholder="Enter Email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
-                />
-                <input
-                    type="password"
-                    placeholder="Enter Password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    className="w-full p-3 rounded bg-gray-800 text-white border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 mb-6"
-                />
-                <button
-                    onClick={handleSendOTP}
-                    className="w-full py-3 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300 mt-4 mb-10"
-                >
-                    Send OTP
+
+        <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-4">
+        <div className="relative w-full max-w-md">
+          <div className="absolute -top-8 -left-8 w-72 h-72 bg-blue-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob"></div>
+          <div className="absolute -bottom-8 -right-8 w-72 h-72 bg-purple-500 rounded-full mix-blend-multiply filter blur-xl opacity-10 animate-blob animation-delay-2000"></div>
+          
+          <div className="relative bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl backdrop-blur-sm">
+            <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-2xl"></div>
+            <div className="p-8">
+              <div className="flex justify-center mb-4">
+                <img src="/public/logos/single.png" alt="Logo" className="w-16 h-16" />
+              </div>
+              <div className="text-center mb-8">
+                <h2 className="text-3xl font-bold bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
+                  Admin Login
+                </h2>
+              </div>
+  
+              <form className="space-y-6">
+                <div>
+                  <label className="block text-gray-400 text-sm font-medium mb-2">Email</label>
+                  <input 
+                    type="email" 
+                    placeholder="Enter Email" 
+                    value={email} 
+                    onChange={(e) => setEmail(e.target.value)} 
+                    className="w-full bg-gray-800/50 p-3 rounded-lg text-white border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" 
+                    required 
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-400 text-sm font-medium mb-2">Password</label>
+                  <input 
+                    type="password" 
+                    placeholder="Enter Password" 
+                    value={password} 
+                    onChange={(e) => setPassword(e.target.value)} 
+                    className="w-full bg-gray-800/50 p-3 rounded-lg text-white border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 focus:outline-none" 
+                    required 
+                  />
+                </div>
+                <button 
+                  type="button" 
+                  onClick={handleSendOTP} 
+                  className="w-full bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 text-white py-3 rounded-lg font-medium hover:from-blue-600 hover:via-purple-600 hover:to-pink-600 transition-all duration-300 focus:ring-2 focus:ring-purple-500/20 focus:outline-none group">
+                  Send OTP
                 </button>
+              </form>
             </div>
+          </div>
         </div>
+      </div>
     );
 };
 
