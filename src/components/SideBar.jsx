@@ -42,9 +42,9 @@ const Sidebar = () => {
         </div> */}
 
         <div className="p-10 ">
-        <img src="/logos/full.png" alt="Admin Panel Logo" className="h-10 w-auto" />
+          <img src="/logos/full.png" alt="Admin Panel Logo" className="h-10 w-auto" />
         </div>
-        
+
         <nav className="p-4 space-y-2">
           <Link
             to="/"

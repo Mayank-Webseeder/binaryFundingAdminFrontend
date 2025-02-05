@@ -13,7 +13,6 @@ export default function Dashboard() {
         const fetchUsers = async () => {
             try {
                 const response = await axios.get("http://localhost:4000/api/v1/user/getAllUser");
-                console.log(response.data, "response.data");
                 if (response.data.success) {
                     setUsers(response.data.user);
                 } else {
@@ -25,25 +24,20 @@ export default function Dashboard() {
                 setLoading(false);
             }
         };
-
         fetchUsers();
     }, []);
 
     // Count active and inactive users
     const activeUsers = users.filter(user => user.status === "active").length;
-    const inactiveUsers = users.filter(user => user.status === "inActive").length;
+    const inactiveUsers = users.filter(user => user.status === "inactive").length;
 
     return (
         <>
             <div className="flex flex-col md:flex-row bg-black text-white">
-                {/* Main Content */}
                 <main className="flex-1 p-6">
-                    {/* Welcome Section */}
                     <header className="mb-6">
                         <h2 className="text-2xl font-bold text-[#0f6dd3]">Welcome, {decodedToken?.firstName}</h2>
                     </header>
-
-                    {/* Stats Cards */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
                         {[
                             { label: "Active Users", count: activeUsers },
@@ -56,16 +50,12 @@ export default function Dashboard() {
                             </div>
                         ))}
                     </div>
-
-                    {/* User Growth Chart */}
                     <div className="p-4 bg-gray-800 shadow rounded-lg mb-6">
                         <h3 className="text-gray-400 mb-2">User Growth</h3>
                         <div className="h-48 bg-[#0f6dd3]/20 flex items-center justify-center rounded-lg">
                             <p className="text-[#0f6dd3]">Chart goes here</p>
                         </div>
                     </div>
-
-                    {/* Alerts Section */}
                     <div className="space-y-4">
                         {[...Array(2)].map((_, index) => (
                             <div key={index} className="flex items-center justify-between p-4 bg-gray-800 shadow rounded-lg">
