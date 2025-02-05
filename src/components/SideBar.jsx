@@ -37,10 +37,14 @@ const Sidebar = () => {
           md:translate-x-0
         `}
       >
-        <div className="p-6">
+        {/* <div className="p-6">
           <h1 className="text-xl font-bold text-[#0f6dd3]">Admin Panel</h1>
-        </div>
+        </div> */}
 
+        <div className="p-10 ">
+        <img src="/logos/full.png" alt="Admin Panel Logo" className="h-10 w-auto" />
+        </div>
+        
         <nav className="p-4 space-y-2">
           <Link
             to="/"
