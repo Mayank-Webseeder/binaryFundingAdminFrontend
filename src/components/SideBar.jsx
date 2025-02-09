@@ -73,11 +73,13 @@ const Sidebar = () => {
         </nav>
 
         <div className="p-4 space-y-2 absolute bottom-0 w-full">
-          <button className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white">
+          <Link
+          to="/notification" 
+          className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white">
             <div className="flex items-center gap-2 justify-center">
               <Bell size={20} /> Notifications
             </div>
-          </button>
+          </Link>
           <button
             onClick={handleLogout}
             className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"

@@ -6,6 +6,7 @@ import OtpVerification from "./components/OtpVerification"
 import SettingsPage from './components/SettingsPage';
 import SideBar from './components/SideBar';
 import Dashboard from './components/Dashboard';
+import Notification from './components/Notification';
 
 const Layout = ({ children }) => {
   return (
@@ -32,6 +33,7 @@ function App() {
               <Route path="/" element={<Dashboard />} />
               <Route path="/allUsers" element={<AdminPanel />} />
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/notification" element={<Notification />} />
             </Routes>
           </Layout>
         }

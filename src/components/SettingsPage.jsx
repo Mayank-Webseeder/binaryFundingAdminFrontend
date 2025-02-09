@@ -88,27 +88,7 @@ const SettingsPage = () => {
   return (
     <div className="flex flex-col md:flex-row bg-black text-white">
       <div className="flex-1 p-6 space-y-8">
-        <h1 className="text-2xl font-bold text-[#0f6dd3] ml-[70px] ">Settings</h1>
-        <div className="bg-gray-900 p-4 sm:p-6 rounded-lg">
-          <div className="flex flex-col sm:flex-row items-center gap-4">
-            <img
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100&h=100&fit=crop"
-              alt="Profile"
-              className="w-16 h-16 rounded-full object-cover"
-            />
-            <div className="flex flex-col items-center sm:items-start">
-              <h2 className="text-xl mb-2">Avatar</h2>
-              <div className="flex flex-col sm:flex-row items-center gap-2 w-full">
-                <button className="w-full sm:w-auto px-4 py-2 bg-[#0f6dd3] rounded-lg hover:bg-[#0f6dd3]/80 flex items-center gap-2">
-                  <Upload size={16} /> Change
-                </button>
-                <button className="w-full sm:w-auto px-4 py-2 bg-red-600/20 text-red-500 rounded-lg hover:bg-red-600/30">
-                  Remove
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <h2 className="text-2xl font-bold text-[#0f6dd3] ml-4">Settings</h2>
         <form onSubmit={handleSubmit} className="bg-gray-900 p-4 sm:p-6 rounded-lg space-y-6">
           <h2 className="text-xl mb-4">Basic Information</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
