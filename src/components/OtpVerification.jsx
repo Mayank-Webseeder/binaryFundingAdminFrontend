@@ -20,7 +20,7 @@ const OtpVerification = () => {
     }
 
     try {
-      const response = await axios.post("http://localhost:4000/api/v1/user/verifyOtp", {
+      const response = await axios.post("https://api.binaryfundingaccount.com/api/v1/user/verifyOtp", {
         email,
         otp,
       });
