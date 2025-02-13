@@ -25,7 +25,7 @@ const AllUsers = () => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await axios.get("https://api.binaryfundingaccount.com/api/v1/user/getAllUser");
+        const response = await axios.get("https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/getAllUser");
         if (response.data.success) {
           setUsers(response.data.user);
         } else {
@@ -44,7 +44,7 @@ const AllUsers = () => {
   const fetchUserById = async (id) => {
     try {
       const response = await axios.get(
-        `https://api.binaryfundingaccount.com/api/v1/user/getUserById/${id}`
+        `https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/getUserById/${id}`
       );
       if (response.data.success) {
         setEditUsersId(id);
@@ -68,7 +68,7 @@ const AllUsers = () => {
     e.preventDefault();
     try {
       await axios.patch(
-        `https://api.binaryfundingaccount.com/api/v1/user/updateUserById/${editUsersId}`,
+        `https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/updateUserById/${editUsersId}`,
         formData
       );
       toast.success("User updated successfully");
@@ -88,7 +88,7 @@ const AllUsers = () => {
     if (confirmDelete) {
       try {
         await axios.delete(
-          `https://api.binaryfundingaccount.com/api/v1/user/deleteUserById/${id}`
+          `https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/deleteUserById/${id}`
         );
         toast.success("User deleted successfully");
         setUsers(users.filter(user => user._id !== id));

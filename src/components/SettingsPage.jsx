@@ -25,7 +25,7 @@ const SettingsPage = () => {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`https://api.binaryfundingaccount.com/api/v1/user/getAdminById/${id}`);
+        const response = await axios.get(`https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/getAdminById/${id}`);
         setFormData(prevState => ({
           ...prevState,
           firstName: response.data.user.firstName,
@@ -59,7 +59,7 @@ const SettingsPage = () => {
     }
 
     try {
-      const response = await fetch("https://api.binaryfundingaccount.com/api/v1/user/adminChangePassword", {
+      const response = await fetch("https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/adminChangePassword", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

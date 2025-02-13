@@ -12,7 +12,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("https://api.binaryfundingaccount.com/api/v1/user/getAllUser");
+                const response = await axios.get("https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/getAllUser");
                 if (response.data.success) {
                     setUsers(response.data.user);
                 } else {

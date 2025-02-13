@@ -14,7 +14,7 @@ const AdminLogin = () => {
         setLoading(true);
 
         try {
-            const response = await axios.post("https://api.binaryfundingaccount.com/api/v1/user/loginAdmin", {
+            const response = await axios.post("https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/loginAdmin", {
                 email,
                 password,
             });
