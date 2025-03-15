@@ -20,6 +20,7 @@ const AdminLogin = () => {
             });
             if (response.data.success) {
                 localStorage.setItem("adminEmail", email);
+                localStorage.setItem("token", response.data.token);
                 navigate("/otp");
             } else {
                 setError(response.data.message);

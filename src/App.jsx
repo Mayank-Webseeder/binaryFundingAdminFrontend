@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { Route, Routes } from "react-router-dom";
-import AdminPanel from "./components/AllUsers"
 import AdminLogin from './components/AdminLogin';
 import OtpVerification from "./components/OtpVerification"
 import SettingsPage from './components/SettingsPage';
 import SideBar from './components/SideBar';
 import Dashboard from './components/Dashboard';
 import Notification from './components/Notification';
+import ActiveUsers from './components/ActiveUsers';
+import InactiveUsers from './components/InActiveUsers';
+import Rebates from './components/Rebates';
 
 const Layout = ({ children }) => {
   return (
@@ -31,7 +33,9 @@ function App() {
           <Layout>
             <Routes>
               <Route path="/" element={<Dashboard />} />
-              <Route path="/allUsers" element={<AdminPanel />} />
+              <Route path="/activeUsers" element={<ActiveUsers />} />
+              <Route path="/inactive-users" element={<InactiveUsers />} />
+              <Route path="/rebates" element={<Rebates />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/notification" element={<Notification />} />
             </Routes>

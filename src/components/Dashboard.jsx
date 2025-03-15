@@ -4,7 +4,16 @@ import axios from "axios";
 
 export default function Dashboard() {
     const localStorageToken = localStorage.getItem("token");
-    const decodedToken = jwtDecode(localStorageToken);
+
+    let decodedToken = null;
+    if (localStorageToken && typeof localStorageToken === "string") {
+        try {
+            decodedToken = jwtDecode(localStorageToken);
+        } catch (error) {
+            console.error("Error decode token :",error);
+        }
+    }
+
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,7 +21,7 @@ export default function Dashboard() {
     useEffect(() => {
         const fetchUsers = async () => {
             try {
-                const response = await axios.get("https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/getAllUser");
+                const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}user/getAllUser`);
                 if (response.data.success) {
                     setUsers(response.data.user);
                 } else {
@@ -57,7 +66,7 @@ export default function Dashboard() {
                         </div>
                     </div>
                     <div className="space-y-4">
-                        {[...Array(2)].map((_, index) => (
+                        {[...Array(1)].map((_, index) => (
                             <div key={index} className="flex items-center justify-between p-4 bg-gray-800 shadow rounded-lg">
                                 <p className="text-gray-400">Add a new user</p>
                                 <button className="py-2 px-4 bg-[#0f6dd3] text-white rounded-lg">
