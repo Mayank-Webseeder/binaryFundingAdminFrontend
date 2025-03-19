@@ -9,6 +9,7 @@ import Notification from './components/Notification';
 import ActiveUsers from './components/ActiveUsers';
 import InactiveUsers from './components/InActiveUsers';
 import Rebates from './components/Rebates';
+import WithdrawalRequests from './components/WithdrawalRequests';
 
 const Layout = ({ children }) => {
   return (
@@ -38,6 +39,7 @@ function App() {
               <Route path="/rebates" element={<Rebates />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/notification" element={<Notification />} />
+              <Route path="/withdrawal-requests" element={<WithdrawalRequests />} />
             </Routes>
           </Layout>
         }

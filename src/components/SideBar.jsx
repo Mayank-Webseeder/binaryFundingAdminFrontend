@@ -79,6 +79,14 @@ const Sidebar = () => {
             </div>
           </Link>
           <Link
+            to="/withdrawal-requests"
+            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
+          >
+            <div className="flex items-center gap-2">
+              <Users size={20} /> Withdrawal Requests
+            </div>
+          </Link>
+          <Link
             to="/settings"
             className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
           >
