@@ -9,7 +9,7 @@ const Sidebar = () => {
   const handleLogout = () => {
     const logout = window.confirm("Are you sure you want to LogOut?");
     if (logout) {
-      localStorage.removeItem("token");
+      localStorage.removeItem("adminToken");
       navigate("/login");
     }
   };

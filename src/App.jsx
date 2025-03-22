@@ -10,6 +10,7 @@ import ActiveUsers from './components/ActiveUsers';
 import InactiveUsers from './components/InActiveUsers';
 import Rebates from './components/Rebates';
 import WithdrawalRequests from './components/WithdrawalRequests';
+import PrivateRoute from "./components/PrivateRoute";
 
 const Layout = ({ children }) => {
   return (
@@ -33,13 +34,15 @@ function App() {
         element={
           <Layout>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/activeUsers" element={<ActiveUsers />} />
-              <Route path="/inactive-users" element={<InactiveUsers />} />
-              <Route path="/rebates" element={<Rebates />} />
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/notification" element={<Notification />} />
-              <Route path="/withdrawal-requests" element={<WithdrawalRequests />} />
+              <Route element={<PrivateRoute />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/activeUsers" element={<ActiveUsers />} />
+                <Route path="/inactive-users" element={<InactiveUsers />} />
+                <Route path="/rebates" element={<Rebates />} />
+                <Route path="/settings" element={<SettingsPage />} />
+                <Route path="/notification" element={<Notification />} />
+                <Route path="/withdrawal-requests" element={<WithdrawalRequests />} />
+              </Route>
             </Routes>
           </Layout>
         }

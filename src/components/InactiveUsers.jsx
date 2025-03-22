@@ -110,13 +110,16 @@ const InactiveUsers = () => {
     try {
       await axios.patch(
         `${import.meta.env.VITE_APP_BASE_URL}user/updateUserById/${id}`,
-        { status: "active" }
+        { 
+          status: "active",
+          canTrade: false // Add this flag to restrict trading
+        }
       );
       
-      // Remove user from active list
+      // Remove user from inactive list
       setUsers(users.filter(user => user._id !== id));
       
-      toast.success("User activated successfully");
+      toast.success("User activated successfully. Trading is restricted.");
     } catch (error) {
       toast.error("Failed to activate user.");
     }
