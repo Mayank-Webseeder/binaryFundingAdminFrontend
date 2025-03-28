@@ -105,7 +105,7 @@ const CustomerWithdrawal = () => {
                                         <select
                                             value={request.status}
                                             onChange={(e) => handleStatusChange(request._id, e.target.value)}
-                                            className={`bg-gray-700 rounded-md px-2 py-1 ${
+                                            className={`w-28 bg-gray-700 border border-gray-700 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm ${
                                                 request.status === 'pending' ? 'text-yellow-500' :
                                                 request.status === 'approved' ? 'text-green-500' : 'text-red-500'
                                             }`}
