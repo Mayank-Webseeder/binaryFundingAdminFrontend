@@ -175,7 +175,7 @@ const Users = () => {
   }
 
   return (
-    <div className="flex flex-col bg-black text-white">
+    <div className="flex flex-col bg-black text-white mt-10 md:mt-0 lg:mt-0">
       <main className="flex-1 p-3 sm:p-6">
         <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-x-auto p-2">
           <div>
@@ -243,7 +243,7 @@ const Users = () => {
                   <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">${user.fee || 0}</td>
                   <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">
                     <select
-                      className={`w-full bg-gray-700 border border-gray-700 rounded-md px-1 sm:px-2 py-0.5 sm:py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-[10px] sm:text-sm ${user.status === 'active' ? 'text-green-600' : 'text-red-600'}`}
+                      className={`w-full sm:w-24 bg-gray-800/50 text-gray-300 border border-gray-700 rounded-md px-2 py-1.5 sm:px-3 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm ${user.status === 'active' ? 'text-green-600' : 'text-red-600'}`}
                       value={user.status}
                       onChange={(e) => handleStatusChange(user._id, e.target.value)}
                     >

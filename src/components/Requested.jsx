@@ -135,9 +135,9 @@ const Requested = () => {
   }
 
   return (
-    <div className="flex flex-col bg-black text-gray-300">
+    <div className="flex flex-col bg-black text-gray-300 mt-10 md:mt-0 lg:mt-0">
       <main className="flex-1 p-3 sm:p-6">
-        <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-x-auto">
+        <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h2 className="text-lg sm:text-2xl font-bold text-blue-400">Pending Plan Requests</h2>
             <p className="text-gray-500 text-xs sm:text-sm mt-1">Showing {filteredRequests.length} pending requests</p>
