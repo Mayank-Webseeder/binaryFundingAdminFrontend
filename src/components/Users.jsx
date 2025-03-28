@@ -21,6 +21,8 @@ const Users = () => {
     phone: "",
     status: "",
   });
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -59,7 +61,20 @@ const Users = () => {
     }
 
     setFilteredUsers(result);
+    setCurrentPage(1);
   }, [searchTerm, statusFilter, users]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = filteredUsers.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredUsers.length / itemsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleItemsPerPageChange = (e) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(1);
+  };
 
   const fetchUserById = async (id) => {
     try {
@@ -161,62 +176,74 @@ const Users = () => {
 
   return (
     <div className="flex flex-col bg-black text-white">
-      <main className="flex-1 p-4 sm:p-6">
-        <header className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <main className="flex-1 p-3 sm:p-6">
+        <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-x-auto p-2">
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-[#0f6dd3]">Users</h2>
-            <p className="text-gray-400 text-sm mt-1">Showing {filteredUsers.length} user accounts</p>
+            <h2 className="text-lg sm:text-2xl font-bold text-[#0f6dd3]">Users</h2>
+            <p className="text-gray-400 text-xs sm:text-sm mt-1">Showing {filteredUsers.length} user accounts</p>
           </div>
-          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 w-full sm:w-auto">
+          <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 w-full sm:w-auto">
             <input
               type="text"
               placeholder="Search by name or phone..."
-              className="w-full sm:w-64 bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm"
+              className="w-full sm:w-64 bg-gray-800/50 text-white border border-gray-700 rounded-md px-2 py-1.5 sm:px-3 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <select
-              className="w-full sm:w-48 bg-gray-700 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm"
+              className="w-full sm:w-48 bg-gray-700 text-white border border-gray-700 rounded-md px-2 py-1.5 sm:px-3 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm"
               value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)} 
+              onChange={(e) => setStatusFilter(e.target.value)}
             >
               <option value="all">All Users</option>
               <option value="active">Active Users</option>
               <option value="inactive">Inactive Users</option>
             </select>
+            <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto">
+              <span className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">Per page:</span>
+              <select
+                className="w-full sm:w-24 bg-gray-700 text-white border border-gray-700 rounded-md px-1 sm:px-2 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm"
+                value={itemsPerPage}
+                onChange={handleItemsPerPageChange}
+              >
+                <option value={10}>10</option>
+                <option value={20}>20</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+              </select>
+            </div>
           </div>
         </header>
 
-        <div className="overflow-x-auto bg-gray-800 shadow rounded-lg">
+        {/* Table with Horizontal Scroll on Mobile */}
+        <div className="overflow-x-auto bg-gray-800 shadow rounded-lg md:mt-10">
           <table className="w-full table-auto rounded-lg shadow-md min-w-[800px]">
             <thead className="bg-slate-900">
               <tr>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Account ID</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">First Name</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Last Name</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Email</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Mobile</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Price</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Fee</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Status</th>
-                <th className="py-2 px-2 sm:py-3 sm:px-4 text-left text-xs sm:text-sm">Action</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Account ID</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">First Name</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Last Name</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Email</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Mobile</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Price</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Fee</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Status</th>
+                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Action</th>
               </tr>
             </thead>
             <tbody>
-              {filteredUsers.map((user) => (
+              {currentItems.map((user) => (
                 <tr key={user._id} className="border-b border-gray-700">
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">{user.accountId}</td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">{user.firstName || "N/A"}</td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">{user.lastName || "N/A"}</td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">{user.email || "N/A"}</td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">{user.phone || "N/A"}</td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">${user.price || 0}</td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">${user.fee || 0}</td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{user.accountId}</td>
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{user.firstName || "N/A"}</td>
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{user.lastName || "N/A"}</td>
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{user.email || "N/A"}</td>
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{user.phone || "N/A"}</td>
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">${user.price || 0}</td>
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">${user.fee || 0}</td>
+                  <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">
                     <select
-                      className={`w-full bg-gray-700 text-white border border-gray-700 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm ${
-                        user.status === 'active' ? 'text-green-600' : 'text-red-600'
-                      }`}
+                      className={`w-full bg-gray-700 border border-gray-700 rounded-md px-1 sm:px-2 py-0.5 sm:py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-[10px] sm:text-sm ${user.status === 'active' ? 'text-green-600' : 'text-red-600'}`}
                       value={user.status}
                       onChange={(e) => handleStatusChange(user._id, e.target.value)}
                     >
@@ -224,19 +251,19 @@ const Users = () => {
                       <option value="inactive" className="text-red-600">Inactive</option>
                     </select>
                   </td>
-                  <td className="py-2 px-2 sm:py-3 sm:px-4">
-                    <div className="flex items-center gap-1 sm:gap-2 flex-nowrap">
+                  <td className="py-1 px-1 sm:py-3 sm:px-4">
+                    <div className="flex items-center gap-0.5 sm:gap-2 flex-nowrap">
                       <button
                         className="bg-blue-500 text-white p-1 sm:p-2 rounded-md hover:bg-blue-600 flex-shrink-0"
                         onClick={() => fetchUserById(user._id)}
                       >
-                        <MdOutlineEdit className="w-4 h-4" />
+                        <MdOutlineEdit className="w-3 h-3 sm:w-4 sm:h-4" />
                       </button>
                       <button
                         className="bg-red-500 text-white p-1 sm:p-2 rounded-md hover:bg-red-600 flex-shrink-0"
                         onClick={() => handleDeleteUser(user._id)}
                       >
-                        <RiDeleteBin3Line className="w-4 h-4" />
+                        <RiDeleteBin3Line className="w-3 h-3 sm:w-4 sm:h-4" />
                       </button>
                     </div>
                   </td>
@@ -245,54 +272,77 @@ const Users = () => {
             </tbody>
           </table>
 
-          {filteredUsers.length === 0 && (
-            <div className="py-8 text-center text-gray-400 text-sm">
+          {currentItems.length === 0 && (
+            <div className="py-6 text-center text-gray-400 text-xs sm:text-sm">
               No users found matching your criteria.
             </div>
           )}
         </div>
 
+        {/* Pagination */}
+        {filteredUsers.length > 0 && (
+          <div className="mt-3 flex justify-end items-center gap-1 sm:gap-2">
+            <button
+              onClick={() => paginate(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-2 py-0.5 sm:px-3 sm:py-1 bg-gray-700 rounded-md disabled:opacity-50 hover:bg-gray-600 text-xs sm:text-sm"
+            >
+              Previous
+            </button>
+            <span className="text-xs sm:text-sm">
+              Page {currentPage} of {totalPages}
+            </span>
+            <button
+              onClick={() => paginate(currentPage + 1)}
+              disabled={currentPage === totalPages}
+              className="px-2 py-0.5 sm:px-3 sm:py-1 bg-gray-700 rounded-md disabled:opacity-50 hover:bg-gray-600 text-xs sm:text-sm"
+            >
+              Next
+            </button>
+          </div>
+        )}
+
         {/* Edit Modal */}
         {editShowModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-            <div className="w-full max-w-md sm:max-w-lg md:max-w-2xl bg-gradient-to-b from-gray-900 to-gray-800 shadow-xl rounded-lg">
-              <div className="border-b border-gray-700 p-4 sm:p-6">
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-3 sm:p-4">
+            <div className="w-full max-w-[90%] sm:max-w-md md:max-w-lg lg:max-w-2xl bg-gradient-to-b from-gray-900 to-gray-800 shadow-xl rounded-lg">
+              <div className="border-b border-gray-700 p-3 sm:p-6">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h2 className="text-lg sm:text-xl font-bold text-blue-400">
+                    <h2 className="text-base sm:text-xl font-bold text-blue-400">
                       Update User Profile
                     </h2>
-                    <p className="text-gray-400 text-xs mt-0.5">Edit user information below</p>
+                    <p className="text-gray-400 text-[10px] sm:text-xs mt-0.5">Edit user information below</p>
                   </div>
                   <button
                     onClick={() => setEditShowModal(false)}
-                    className="rounded-full p-1.5 hover:bg-gray-700 transition-colors"
+                    className="rounded-full p-1 sm:p-1.5 hover:bg-gray-700 transition-colors"
                   >
-                    <X className="h-4 w-4 text-gray-400" />
+                    <X className="h-3 w-3 sm:h-4 sm:w-4 text-gray-400" />
                   </button>
                 </div>
               </div>
 
-              <div className="p-4 sm:p-6">
-                <form onSubmit={handleUpdateUser} className="space-y-4">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="p-3 sm:p-6">
+                <form onSubmit={handleUpdateUser} className="space-y-3 sm:space-y-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                     <div className="space-y-1">
-                      <label className="text-xs font-medium text-gray-300">First Name</label>
+                      <label className="text-[10px] sm:text-xs font-medium text-gray-300">First Name</label>
                       <input
                         type="text"
                         placeholder="Enter first name"
-                        className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm"
+                        className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-xs sm:text-sm"
                         value={formData.firstName}
                         onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
                         required
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-xs font-medium text-gray-300">Last Name</label>
+                      <label className="text-[10px] sm:text-xs font-medium text-gray-300">Last Name</label>
                       <input
                         type="text"
                         placeholder="Enter last name"
-                        className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm"
+                        className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-xs sm:text-sm"
                         value={formData.lastName}
                         onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
                         required
@@ -301,15 +351,15 @@ const Users = () => {
                   </div>
 
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-300">Contact Information</label>
-                    <div className="flex flex-col sm:flex-row gap-3">
-                      <select className="w-full sm:w-1/3 bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm">
+                    <label className="text-[10px] sm:text-xs font-medium text-gray-300">Contact Information</label>
+                    <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                      <select className="w-full sm:w-1/3 bg-gray-800/50 text-white border border-gray-700 rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-xs sm:text-sm">
                         {countryOptions}
                       </select>
                       <input
                         type="tel"
                         placeholder="Phone number"
-                        className="w-full sm:w-2/3 bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm"
+                        className="w-full sm:w-2/3 bg-gray-800/50 text-white border border-gray-700 rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-xs sm:text-sm"
                         value={formData.phone}
                         onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                         required
@@ -317,20 +367,20 @@ const Users = () => {
                     </div>
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-300">Email Address</label>
+                    <label className="text-[10px] sm:text-xs font-medium text-gray-300">Email Address</label>
                     <input
                       type="email"
                       placeholder="Email"
-                      className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm"
+                      className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-xs sm:text-sm"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                       required
                     />
                   </div>
                   <div className="space-y-1">
-                    <label className="text-xs font-medium text-gray-300">Status</label>
+                    <label className="text-[10px] sm:text-xs font-medium text-gray-300">Status</label>
                     <select
-                      className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-sm"
+                      className="w-full bg-gray-800/50 text-white border border-gray-700 rounded-md px-2 py-1 sm:px-3 sm:py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500/50 transition-all text-xs sm:text-sm"
                       value={formData.status}
                       onChange={(e) => setFormData({ ...formData, status: e.target.value })}
                     >
@@ -340,7 +390,7 @@ const Users = () => {
                   </div>
                   <button
                     type="submit"
-                    className="w-full sm:w-auto bg-blue-500 text-white py-2 px-6 rounded-xl font-semibold hover:bg-blue-400 transition text-sm"
+                    className="w-full sm:w-auto bg-blue-500 text-white py-1.5 sm:py-2 px-4 sm:px-6 rounded-xl font-semibold hover:bg-blue-400 transition text-xs sm:text-sm"
                   >
                     Update User
                   </button>
