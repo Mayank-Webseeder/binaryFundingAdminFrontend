@@ -11,7 +11,6 @@ import InactiveUsers from './components/InActiveUsers';
 import Rebates from './components/Rebates';
 import WithdrawalRequests from './components/WithdrawalRequests';
 import PrivateRoute from "./components/PrivateRoute";
-import UserManagement from './components/Users';
 
 const Layout = ({ children }) => {
   return (
@@ -37,7 +36,6 @@ function App() {
             <Routes>
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/users" element={<UserManagement />} />
                 <Route path="/activeUsers" element={<ActiveUsers />} />
                 <Route path="/inactive-users" element={<InactiveUsers />} />
                 <Route path="/rebates" element={<Rebates />} />

@@ -55,19 +55,11 @@ const Sidebar = () => {
             </div>
           </Link>
           <Link
-            to="/users"
-            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
-          >
-            <div className="flex items-center gap-2">
-              <Users size={20} /> Users
-            </div>
-          </Link>
-          <Link
             to="/activeUsers"
             className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
           >
             <div className="flex items-center gap-2">
-              <Users size={20} /> Active Plans
+              <Users size={20} /> Active Users
             </div>
           </Link>
           <Link
@@ -75,7 +67,7 @@ const Sidebar = () => {
             className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
           >
             <div className="flex items-center gap-2">
-              <Users size={20} /> Inactive Plans
+              <Users size={20} /> Inactive Users
             </div>
           </Link>
           <Link
