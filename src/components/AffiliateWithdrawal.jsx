@@ -18,7 +18,7 @@ const AffiliateWithdrawal = () => {
     // Fetch withdrawal requests from the backend
     const fetchRequests = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/getAllRequests`);
+            const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/getAffiliateRequests`);
             setRequests(response.data.withdrawalRequests);
             setFilteredRequests(response.data.withdrawalRequests);
             setLoading(false);
@@ -63,20 +63,48 @@ const AffiliateWithdrawal = () => {
     };
 
     const handleStatusChange = async (requestId, newStatus) => {
-        try {
-            await axios.patch(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/update/${requestId}`, {
-                status: newStatus
-            });
-            alert(`Withdrawal request ${newStatus} successfully`);
-            fetchRequests();
-        } catch (err) {
-            if (err.response && err.response.data && err.response.data.message) {
-                alert(err.response.data.message);
-            } else {
-                alert("Error updating withdrawal status.");
+        if (newStatus === 'approved') {
+            try {
+                const response = await axios.patch(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/affiliateApprove/${requestId}`);
+
+                if (response.data.success) {
+                    alert(response.data.message);
+                    fetchRequests();
+                } else {
+                    alert(response.data.message || "Error updating withdrawal status.");
+                }
+            } catch (err) {
+                if (err.response && err.response.data && err.response.data.message) {
+                    alert(err.response.data.message);
+                } else {
+                    alert("Error updating withdrawal status.");
+                }
+            }
+        } else {
+            try {
+                const response = await axios.patch(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/affiliateReject/${requestId}`, {
+                    status: newStatus
+                });
+
+                alert(`Withdrawal request ${newStatus} successfully`);
+                fetchRequests();
+            } catch (err) {
+                if (err.response && err.response.data && err.response.data.message) {
+                    alert(err.response.data.message);
+                } else {
+                    alert("Error updating withdrawal status.");
+                }
             }
         }
     };
+
+    if (loading) {
+        return <p>Loading withdrawal requests...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
 
     const handleCopyWallet = (walletCode, requestId) => {
         navigator.clipboard.writeText(walletCode);
@@ -89,17 +117,9 @@ const AffiliateWithdrawal = () => {
         setQrShowModal(true);
     };
 
-    if (loading) {
-        return <div className="flex justify-center items-center h-screen text-white">Loading withdrawal requests...</div>;
-    }
-
-    if (error) {
-        return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
-    }
-
     return (
-        <div className="flex flex-col md:flex-row bg-black text-white mt-10 md:mt-0 lg:mt-0">
-            <main className="flex-1 mt-4 lg:p-3 sm:p-6">
+        <div className="flex flex-col md:flex-row bg-black text-white">
+            <main className="flex-1 mt-6 lg:p-6">
                 <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 px-3 sm:px-4 overflow-x-auto">
                     <div>
                         <h2 className="text-lg sm:text-2xl font-bold text-[#0f6dd3]">Affiliate Withdrawal</h2>
@@ -143,7 +163,7 @@ const AffiliateWithdrawal = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {currentItems.map((request) => (
+                            {requests.map((request) => (
                                 <tr key={request._id} className="border-b border-gray-700">
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request._id.substring(0, 8)}...</td>
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request.affiliateId.toString().substring(0, 8)}...</td>
@@ -162,10 +182,9 @@ const AffiliateWithdrawal = () => {
                                         <select
                                             value={request.status}
                                             onChange={(e) => handleStatusChange(request._id, e.target.value)}
-                                            className={`w-24 sm:w-28 bg-gray-700 border border-gray-700 rounded-md px-1 sm:px-2 py-0.5 sm:py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-[10px] sm:text-sm ${
-                                                request.status === 'pending' ? 'text-yellow-500' :
+                                            className={`w-24 sm:w-28 bg-gray-700 border border-gray-700 rounded-md px-1 sm:px-2 py-0.5 sm:py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-[10px] sm:text-sm ${request.status === 'pending' ? 'text-yellow-500' :
                                                 request.status === 'approved' ? 'text-green-500' : 'text-red-500'
-                                            }`}
+                                                }`}
                                         >
                                             <option value="pending" className="text-yellow-500">Pending</option>
                                             <option value="approved" className="text-green-500">Approved</option>
@@ -175,7 +194,7 @@ const AffiliateWithdrawal = () => {
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{new Date(request.createdAt).toLocaleDateString()}</td>
                                     <td className="py-1 px-1 sm:py-3 sm:px-4">
                                         <button
-                                            onClick={() => handleViewQrCode(request.qrCodeUrl)}
+                                            onClick={() => handleViewQrCode(request.image)}
                                             className="text-gray-400 hover:text-white"
                                             title="View QR Code"
                                         >
@@ -223,7 +242,7 @@ const AffiliateWithdrawal = () => {
                         <div className="w-full max-w-[90%] sm:max-w-md bg-gradient-to-b from-gray-900 to-gray-800 shadow-xl rounded-lg">
                             <div className="border-b border-gray-700 p-3 sm:p-6">
                                 <div className="flex items-center justify-between">
-                                    <h2 className="text-base sm:text-xl font-bold text-blue-400">QR Code</h2>
+                                <h2 className="text-base sm:text-xl font-bold text-blue-400">QR Code</h2>
                                     <button
                                         onClick={() => setQrShowModal(false)}
                                         className="rounded-full p-1 sm:p-1.5 hover:bg-gray-700 transition-colors"
