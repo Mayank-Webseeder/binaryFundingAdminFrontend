@@ -153,9 +153,9 @@ const Rebates = () => {
                       <MdOutlineAttachMoney />
                       <span>Process Payment</span>
                     </button>
-                    <button className="bg-gray-700 text-white py-2 px-6 rounded-lg font-semibold hover:bg-gray-600 transition">
+                    {/* <button className="bg-gray-700 text-white py-2 px-6 rounded-lg font-semibold hover:bg-gray-600 transition">
                       View Payment History
-                    </button>
+                    </button> */}
                   </div>
                 </div>
               </div>

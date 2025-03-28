@@ -48,7 +48,6 @@ const Users = () => {
     if (searchTerm.trim()) {
       const lowerSearchTerm = searchTerm.toLowerCase();
       result = result.filter(user => {
-        // Safely handle undefined values by providing defaults
         const fullName = `${user.firstName || ''} ${user.lastName || ''}`.toLowerCase();
         const phone = (user.phone || '').toLowerCase();
         return fullName.includes(lowerSearchTerm) || phone.includes(lowerSearchTerm);
@@ -118,8 +117,7 @@ const Users = () => {
     }
   };
 
-  const toggleUserStatus = async (id, currentStatus) => {
-    const newStatus = currentStatus === "active" ? "inactive" : "active";
+  const handleStatusChange = async (id, newStatus) => {
     try {
       await axios.patch(
         `${import.meta.env.VITE_APP_BASE_URL}user/updateUserById/${id}`,
@@ -178,7 +176,7 @@ const Users = () => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
             <select
-              className="w-full sm:w-48 bg-gray-800/50 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm"
+              className="w-full sm:w-48 bg-gray-700 text-white border border-gray-700 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-sm"
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)} 
             >
@@ -214,8 +212,17 @@ const Users = () => {
                   <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">{user.phone || "N/A"}</td>
                   <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">${user.price || 0}</td>
                   <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">${user.fee || 0}</td>
-                  <td className={`py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm font-semibold ${user.status === 'active' ? 'text-green-600' : 'text-red-600'}`}>
-                    {user.status}
+                  <td className="py-2 px-2 sm:py-3 sm:px-4 text-xs sm:text-sm">
+                    <select
+                      className={`w-full bg-gray-700 text-white border border-gray-700 rounded-md px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm ${
+                        user.status === 'active' ? 'text-green-600' : 'text-red-600'
+                      }`}
+                      value={user.status}
+                      onChange={(e) => handleStatusChange(user._id, e.target.value)}
+                    >
+                      <option value="active" className="text-green-600">Active</option>
+                      <option value="inactive" className="text-red-600">Inactive</option>
+                    </select>
                   </td>
                   <td className="py-2 px-2 sm:py-3 sm:px-4">
                     <div className="flex items-center gap-1 sm:gap-2 flex-nowrap">
@@ -230,15 +237,6 @@ const Users = () => {
                         onClick={() => handleDeleteUser(user._id)}
                       >
                         <RiDeleteBin3Line className="w-4 h-4" />
-                      </button>
-                      <button
-                        className={`text-white px-2 py-1 sm:px-4 sm:py-2 rounded-md min-w-[80px] sm:min-w-[96px] text-xs sm:text-sm flex-shrink-0 ${user.status === 'active'
-                            ? 'bg-amber-500 hover:bg-amber-600'
-                            : 'bg-green-500 hover:bg-green-600'
-                          }`}
-                        onClick={() => toggleUserStatus(user._id, user.status)}
-                      >
-                        {user.status === 'active' ? 'Deactivate' : 'Activate'}
                       </button>
                     </div>
                   </td>
