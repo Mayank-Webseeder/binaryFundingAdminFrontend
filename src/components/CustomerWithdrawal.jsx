@@ -5,8 +5,8 @@ import { BsQrCode } from "react-icons/bs";
 
 const CustomerWithdrawal = () => {
     const [requests, setRequests] = useState([]);
-    const [filteredRequests, setFilteredRequests] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [filteredRequests, setFilteredRequests] = useState([]);
     const [error, setError] = useState(null);
     const [qrShowModal, setQrShowModal] = useState(false);
     const [selectedQrCode, setSelectedQrCode] = useState("");
@@ -18,7 +18,7 @@ const CustomerWithdrawal = () => {
     // Fetch withdrawal requests from the backend
     const fetchRequests = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/getAllRequests`);
+            const response = await axios.get(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/getUserRequests`);
             setRequests(response.data.withdrawalRequests);
             setFilteredRequests(response.data.withdrawalRequests);
             setLoading(false);
@@ -63,20 +63,48 @@ const CustomerWithdrawal = () => {
     };
 
     const handleStatusChange = async (requestId, newStatus) => {
-        try {
-            await axios.patch(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/update/${requestId}`, {
-                status: newStatus
-            });
-            alert(`Withdrawal request ${newStatus} successfully`);
-            fetchRequests();
-        } catch (err) {
-            if (err.response && err.response.data && err.response.data.message) {
-                alert(err.response.data.message);
-            } else {
-                alert("Error updating withdrawal status.");
+        if (newStatus === 'approved') {
+            try {
+                const response = await axios.patch(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/userApprove/${requestId}`);
+
+                if (response.data.success) {
+                    alert(response.data.message);
+                    fetchRequests();
+                } else {
+                    alert(response.data.message || "Error updating withdrawal status.");
+                }
+            } catch (err) {
+                if (err.response && err.response.data && err.response.data.message) {
+                    alert(err.response.data.message);
+                } else {
+                    alert("Error updating withdrawal status.");
+                }
+            }
+        } else {
+            try {
+                const response = await axios.patch(`${import.meta.env.VITE_APP_BASE_URL}withdrawal/userReject/${requestId}`, {
+                    status: newStatus
+                });
+
+                alert(`Withdrawal request ${newStatus} successfully`);
+                fetchRequests();
+            } catch (err) {
+                if (err.response && err.response.data && err.response.data.message) {
+                    alert(err.response.data.message);
+                } else {
+                    alert("Error updating withdrawal status.");
+                }
             }
         }
     };
+
+    if (loading) {
+        return <p>Loading withdrawal requests...</p>;
+    }
+
+    if (error) {
+        return <p>{error}</p>;
+    }
 
     const handleCopyWallet = (walletCode, requestId) => {
         navigator.clipboard.writeText(walletCode);
@@ -88,14 +116,6 @@ const CustomerWithdrawal = () => {
         setSelectedQrCode(qrCodeUrl);
         setQrShowModal(true);
     };
-
-    if (loading) {
-        return <div className="flex justify-center items-center h-screen text-white">Loading withdrawal requests...</div>;
-    }
-
-    if (error) {
-        return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
-    }
 
     return (
         <div className="flex flex-col md:flex-row bg-black text-white mt-10 md:mt-0 lg:mt-0">
@@ -134,7 +154,7 @@ const CustomerWithdrawal = () => {
                         <thead className="bg-slate-900">
                             <tr>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Request ID</th>
-                                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Affiliate ID</th>
+                                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">User ID</th>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Amount</th>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Wallet Address</th>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Status</th>
@@ -146,7 +166,7 @@ const CustomerWithdrawal = () => {
                             {currentItems.map((request) => (
                                 <tr key={request._id} className="border-b border-gray-700">
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request._id.substring(0, 8)}...</td>
-                                    <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request.affiliateId.toString().substring(0, 8)}...</td>
+                                    <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request.userId.toString().substring(0, 8)}...</td>
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">${request.amount}</td>
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm flex items-center gap-1 sm:gap-2">
                                         {request.walletCode}
@@ -162,10 +182,9 @@ const CustomerWithdrawal = () => {
                                         <select
                                             value={request.status}
                                             onChange={(e) => handleStatusChange(request._id, e.target.value)}
-                                            className={`w-24 sm:w-28 bg-gray-700 border border-gray-700 rounded-md px-1 sm:px-2 py-0.5 sm:py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-[10px] sm:text-sm ${
-                                                request.status === 'pending' ? 'text-yellow-500' :
+                                            className={`w-24 sm:w-28 bg-gray-700 border border-gray-700 rounded-md px-1 sm:px-2 py-0.5 sm:py-1 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-[10px] sm:text-sm ${request.status === 'pending' ? 'text-yellow-500' :
                                                 request.status === 'approved' ? 'text-green-500' : 'text-red-500'
-                                            }`}
+                                                }`}
                                         >
                                             <option value="pending" className="text-yellow-500">Pending</option>
                                             <option value="approved" className="text-green-500">Approved</option>
@@ -175,7 +194,7 @@ const CustomerWithdrawal = () => {
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{new Date(request.createdAt).toLocaleDateString()}</td>
                                     <td className="py-1 px-1 sm:py-3 sm:px-4">
                                         <button
-                                            onClick={() => handleViewQrCode(request.qrCodeUrl)}
+                                            onClick={() => handleViewQrCode(request.image)}
                                             className="text-gray-400 hover:text-white"
                                             title="View QR Code"
                                         >
