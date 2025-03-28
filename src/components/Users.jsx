@@ -177,7 +177,7 @@ const Users = () => {
   return (
     <div className="flex flex-col bg-black text-white mt-10 md:mt-0 lg:mt-0">
       <main className="flex-1 p-3 sm:p-6">
-        <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-x-auto p-2">
+        <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-x-auto px-2">
           <div>
             <h2 className="text-lg sm:text-2xl font-bold text-[#0f6dd3]">Users</h2>
             <p className="text-gray-400 text-xs sm:text-sm mt-1">Showing {filteredUsers.length} user accounts</p>
@@ -202,7 +202,7 @@ const Users = () => {
             <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto">
               <span className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">Per page:</span>
               <select
-                className="w-full sm:w-24 bg-gray-700 text-white border border-gray-700 rounded-md px-1 sm:px-2 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm"
+                className="w-16 bg-gray-700 text-white border border-gray-700 rounded-md px-1 sm:px-2 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm"
                 value={itemsPerPage}
                 onChange={handleItemsPerPageChange}
               >

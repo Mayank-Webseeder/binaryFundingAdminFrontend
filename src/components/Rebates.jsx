@@ -102,7 +102,7 @@ const Rebates = () => {
             <div className="flex items-center gap-1 sm:gap-2 w-full sm:w-auto">
               <span className="text-xs sm:text-sm text-gray-400 whitespace-nowrap">Per page:</span>
               <select
-                className="w-full sm:w-24 bg-gray-700 text-white border border-gray-700 rounded-md px-1 sm:px-2 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm"
+                className="w-16 bg-gray-700 text-white border border-gray-700 rounded-md px-1 sm:px-2 py-1.5 sm:py-2 focus:outline-none focus:ring-2 focus:ring-blue-500/50 text-xs sm:text-sm"
                 value={itemsPerPage}
                 onChange={handleItemsPerPageChange}
               >
