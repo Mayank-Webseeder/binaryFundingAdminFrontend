@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { Menu, X, Settings, Bell, LogOut, Users } from "lucide-react";
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Add this to get current route
 
   const handleLogout = () => {
     const logout = window.confirm("Are you sure you want to LogOut?");
@@ -12,6 +13,11 @@ const Sidebar = () => {
       localStorage.removeItem("adminToken");
       navigate("/login");
     }
+  };
+
+  // Helper function to determine if a route is active
+  const isActiveRoute = (route) => {
+    return location.pathname === route;
   };
 
   return (
@@ -37,26 +43,46 @@ const Sidebar = () => {
           md:translate-x-0
         `}
       >
-        {/* <div className="p-6">
-          <h1 className="text-xl font-bold text-[#0f6dd3]">Admin Panel</h1>
-        </div> */}
-
-        <div className="p-10 ">
+        <div className="p-10">
           <img src="/logos/full.png" alt="Admin Panel Logo" className="h-10 w-auto" />
         </div>
 
         <nav className="p-4 space-y-2">
           <Link
             to="/"
-            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
           >
             <div className="flex items-center gap-2">
               <Users size={20} /> Dashboard
             </div>
           </Link>
           <Link
+            to="/requested"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/requested") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Users size={20} /> Requested
+            </div>
+          </Link>
+          <Link
+            to="/users"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/users") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Users size={20} /> Users
+            </div>
+          </Link>
+          {/* <Link
             to="/activeUsers"
-            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/activeUsers") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
           >
             <div className="flex items-center gap-2">
               <Users size={20} /> Active Users
@@ -64,31 +90,59 @@ const Sidebar = () => {
           </Link>
           <Link
             to="/inactive-users"
-            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/inactive-users") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
           >
             <div className="flex items-center gap-2">
               <Users size={20} /> Inactive Users
             </div>
-          </Link>
+          </Link> */}
           <Link
             to="/rebates"
-            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/rebates") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
           >
             <div className="flex items-center gap-2">
               <Users size={20} /> Rebates
             </div>
           </Link>
-          <Link
+          {/* <Link
             to="/withdrawal-requests"
-            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/withdrawal-requests") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
           >
             <div className="flex items-center gap-2">
-              <Users size={20} /> Withdrawal Requests
+              <Users size={20} />Withdrawal Requests
+            </div>
+          </Link> */}
+          <Link
+            to="/affiliate-withdrawal"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/affiliate-withdrawal") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Users size={20} />Affiliate Withdrawal
+            </div>
+          </Link>
+          <Link
+            to="/customer-withdrawal"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/customer-withdrawal") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Users size={20} />Customer Withdrawal
             </div>
           </Link>
           <Link
             to="/settings"
-            className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/settings") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
           >
             <div className="flex items-center gap-2">
               <Settings size={20} /> Settings
@@ -98,8 +152,11 @@ const Sidebar = () => {
 
         <div className="p-4 space-y-2 absolute bottom-0 w-full">
           <Link
-          to="/notification" 
-          className="block w-full text-left p-2 rounded bg-[#0f6dd3]/20 hover:bg-[#0f6dd3] text-white">
+            to="/notification"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/notification") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
+          >
             <div className="flex items-center gap-2 justify-center">
               <Bell size={20} /> Notifications
             </div>

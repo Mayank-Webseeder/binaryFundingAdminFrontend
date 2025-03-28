@@ -11,6 +11,10 @@ import InactiveUsers from './components/InActiveUsers';
 import Rebates from './components/Rebates';
 import WithdrawalRequests from './components/WithdrawalRequests';
 import PrivateRoute from "./components/PrivateRoute";
+import Users from "./components/Users.jsx";
+import AffiliateWithdrawal from './components/AffiliateWithdrawal.jsx';
+import CustomerWithdrawal from './components/CustomerWithdrawal.jsx';
+import Requested from './components/Requested.jsx';
 
 const Layout = ({ children }) => {
   return (
@@ -36,12 +40,16 @@ function App() {
             <Routes>
               <Route element={<PrivateRoute />}>
                 <Route path="/" element={<Dashboard />} />
-                <Route path="/activeUsers" element={<ActiveUsers />} />
-                <Route path="/inactive-users" element={<InactiveUsers />} />
+                <Route path="/requested" element={<Requested />} />
+                <Route path="/users" element={<Users />} />
+                {/* <Route path="/activeUsers" element={<ActiveUsers />} />
+                <Route path="/inactive-users" element={<InactiveUsers />} /> */}
                 <Route path="/rebates" element={<Rebates />} />
                 <Route path="/settings" element={<SettingsPage />} />
                 <Route path="/notification" element={<Notification />} />
-                <Route path="/withdrawal-requests" element={<WithdrawalRequests />} />
+                {/* <Route path="/withdrawal-requests" element={<WithdrawalRequests />} /> */}
+                <Route path="/affiliate-withdrawal" element={<AffiliateWithdrawal />} />
+                <Route path="/customer-withdrawal" element={<CustomerWithdrawal />} />
               </Route>
             </Routes>
           </Layout>
