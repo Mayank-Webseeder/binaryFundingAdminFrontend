@@ -19,10 +19,12 @@ import Requested from './components/Requested.jsx';
 const Layout = ({ children }) => {
   return (
     <div className="flex min-h-screen bg-black">
-      <div className="left-0 top-0 h-full lg:w-64 bg-gray-900 z-50">
+      <div className="fixed left-0 top-0 h-screen lg:w-64 bg-gray-900 z-50">
         <SideBar />
       </div>
-      <div className="flex-1 p-6 overflow-y-auto">{children}</div>
+      <div className="flex-1 p-6 overflow-y-auto lg:ml-64">
+        {children}
+      </div>
     </div>
   );
 };
