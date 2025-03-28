@@ -59,16 +59,6 @@ const Sidebar = () => {
             </div>
           </Link>
           <Link
-            to="/requested"
-            className={`block w-full text-left p-2 rounded text-white ${
-              isActiveRoute("/requested") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
-            }`}
-          >
-            <div className="flex items-center gap-2">
-              <Users size={20} /> Requested
-            </div>
-          </Link>
-          <Link
             to="/users"
             className={`block w-full text-left p-2 rounded text-white ${
               isActiveRoute("/users") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
@@ -78,6 +68,17 @@ const Sidebar = () => {
               <Users size={20} /> Users
             </div>
           </Link>
+          <Link
+            to="/requested"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/requested") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Users size={20} /> Requested
+            </div>
+          </Link>
+          
           {/* <Link
             to="/activeUsers"
             className={`block w-full text-left p-2 rounded text-white ${
