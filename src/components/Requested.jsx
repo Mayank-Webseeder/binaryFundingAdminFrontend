@@ -135,7 +135,7 @@ const Requested = () => {
   }
 
   return (
-    <div className="flex flex-col bg-black text-gray-300 min-h-screen">
+    <div className="flex flex-col bg-black text-gray-300">
       <main className="flex-1 p-3 sm:p-6">
         <header className="mb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 overflow-x-auto">
           <div>
@@ -226,7 +226,7 @@ const Requested = () => {
           )}
         </div>
 
-        {/* Pagination */}
+        {/* Pagination  */}
         {filteredRequests.length > 0 && (
           <div className="mt-3 flex justify-end items-center gap-1 sm:gap-2">
             <button
