@@ -154,7 +154,7 @@ const AffiliateWithdrawal = () => {
                         <thead className="bg-slate-900">
                             <tr>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Request ID</th>
-                                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Affiliate ID</th>
+                                <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Affiliate Name</th>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Amount</th>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Wallet Address</th>
                                 <th className="py-1 px-1 sm:py-3 sm:px-4 text-left text-[10px] sm:text-sm">Status</th>
@@ -166,7 +166,7 @@ const AffiliateWithdrawal = () => {
                             {requests.map((request) => (
                                 <tr key={request._id} className="border-b border-gray-700">
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request._id.substring(0, 8)}...</td>
-                                    <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request.affiliateId.toString().substring(0, 8)}...</td>
+                                    <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">{request.firstName} {request.lastName}</td>
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm">${request.amount}</td>
                                     <td className="py-1 px-1 sm:py-3 sm:px-4 text-[10px] sm:text-sm flex items-center gap-1 sm:gap-2">
                                         {request.walletCode}
