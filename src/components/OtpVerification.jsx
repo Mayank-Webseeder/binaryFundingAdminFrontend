@@ -20,7 +20,7 @@ const OtpVerification = () => {
     }
 
     try {
-      const response = await axios.post("https://binaryfundingaccount-backend-vx0u.onrender.com/api/v1/user/verifyOtp", {
+      const response = await axios.post(`${import.meta.env.VITE_APP_BASE_URL}user/verifyOtp`, {
         email,
         otp,
       });
