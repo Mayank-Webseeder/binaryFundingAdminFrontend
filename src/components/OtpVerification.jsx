@@ -52,7 +52,7 @@ const OtpVerification = () => {
           <div className="p-8">
             <div className="text-center mb-8">
               <img 
-                src="/public/logos/single.png" 
+                src="/logos/single.png" 
                 alt="Logo" 
                 className="w-16 h-16 mx-auto mb-6" 
               />
