@@ -40,7 +40,7 @@ const Sidebar = () => {
         className={`
           fixed md:static w-64 md:w-64 h-screen bg-gray-900 shadow-lg z-50 transition-transform duration-300
           ${isOpen ? "translate-x-0" : "-translate-x-full"} 
-          md:translate-x-0
+          md:translate-x-0 flex flex-col
         `}
       >
         <div className="p-10">
@@ -140,6 +140,16 @@ const Sidebar = () => {
             </div>
           </Link>
           <Link
+            to="/support-query"
+            className={`block w-full text-left p-2 rounded text-white ${
+              isActiveRoute("/customer-withdrawal") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
+            }`}
+          >
+            <div className="flex items-center gap-2">
+              <Users size={20} />Support Query
+            </div>
+          </Link>
+          <Link
             to="/settings"
             className={`block w-full text-left p-2 rounded text-white ${
               isActiveRoute("/settings") ? "bg-[#0f6dd3]" : "bg-[#0f6dd3]/20 hover:bg-[#0f6dd3]"
@@ -151,7 +161,7 @@ const Sidebar = () => {
           </Link>
         </nav>
 
-        <div className="p-4 space-y-2 absolute bottom-0 w-full">
+        <div className="p-4 space-y-2 absolute bottom-1 w-full">
           <Link
             to="/notification"
             className={`block w-full text-left p-2 rounded text-white ${

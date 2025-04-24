@@ -15,6 +15,7 @@ import Users from "./components/Users.jsx";
 import AffiliateWithdrawal from './components/AffiliateWithdrawal.jsx';
 import CustomerWithdrawal from './components/CustomerWithdrawal.jsx';
 import Requested from './components/Requested.jsx';
+import SupportQuery from './components/SupportQuery.jsx';
 
 const Layout = ({ children }) => {
   return (
@@ -52,6 +53,7 @@ function App() {
                 {/* <Route path="/withdrawal-requests" element={<WithdrawalRequests />} /> */}
                 <Route path="/affiliate-withdrawal" element={<AffiliateWithdrawal />} />
                 <Route path="/customer-withdrawal" element={<CustomerWithdrawal />} />
+                <Route path="/support-query" element={<SupportQuery />} />
               </Route>
             </Routes>
           </Layout>
