@@ -10,23 +10,23 @@ export default function SupportQuery() {
     const [totalPages, setTotalPages] = useState(1);
     const [replyText, setReplyText] = useState('');
     const [replyImage, setReplyImage] = useState(null);
-    const [submittedReplies, setSubmittedReplies] = useState({});
+    const [loadingReply, setLoadingReply] = useState(false);
 
-    // Fetch notifications with polling
-    useEffect(() => {
-        const fetchNotifications = async () => {
-            try {
-                const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL}support/getQueries`);
-                if (response.ok) {
-                    const data = await response.json();
-                    setNotifications(data.data);
-                    setTotalPages(Math.ceil(data.data.length / itemsPerPage));
-                }
-            } catch (error) {
-                console.error('Error fetching notifications:', error);
+    // Fetch notifications (with polling)
+    const fetchNotifications = async () => {
+        try {
+            const response = await fetch(`${import.meta.env.VITE_APP_BASE_URL}support/getQueries`);
+            if (response.ok) {
+                const data = await response.json();
+                setNotifications(data.data);
+                setTotalPages(Math.ceil(data.data.length / itemsPerPage));
             }
-        };
+        } catch (error) {
+            console.error('Error fetching notifications:', error);
+        }
+    };
 
+    useEffect(() => {
         fetchNotifications();
         const interval = setInterval(fetchNotifications, 10000);
         return () => clearInterval(interval);
@@ -46,19 +46,44 @@ export default function SupportQuery() {
         setReplyImage(null);
     };
 
-    const handleReplySubmit = (notificationId) => {
-        if (replyText.trim()) {
-            setSubmittedReplies((prev) => ({
-                ...prev,
-                [notificationId]: {
-                    text: replyText,
-                    image: replyImage ? URL.createObjectURL(replyImage) : null,
-                    submittedAt: new Date().toISOString()
-                }
-            }));
-            setReplyText('');
-            setReplyImage(null);
+    // Reply and close query
+    const handleReplySubmit = async (notificationId) => {
+        if (!replyText.trim()) return;
+        setLoadingReply(true);
+
+        const formData = new FormData();
+        formData.append('reply', replyText);
+        if (replyImage) {
+            formData.append('image', replyImage);
         }
+
+        try {
+            const response = await fetch(
+                `${import.meta.env.VITE_APP_BASE_URL}support/replyQuery/${notificationId}`,
+                {
+                    method: 'POST',
+                    body: formData,
+                }
+            );
+            if (response.ok) {
+                const data = await response.json();
+                setSelectedNotification(data.query);
+                setReplyText('');
+                setReplyImage(null);
+                fetchNotifications();
+            } else {
+                let errorMsg = `Failed to send reply. (${response.status})`;
+                try {
+                    const errorData = await response.json();
+                    if (errorData.message) errorMsg = errorData.message;
+                } catch (e) {}
+                alert(errorMsg);
+            }
+        } catch (error) {
+            console.error('Error submitting reply:', error);
+            alert("An error occurred while sending your reply.");
+        }
+        setLoadingReply(false);
     };
 
     const paginate = (pageNumber) => {
@@ -71,6 +96,31 @@ export default function SupportQuery() {
         (currentPage - 1) * itemsPerPage,
         currentPage * itemsPerPage
     );
+
+    // Helper for status color
+    const getStatusBadge = (status) => {
+        return (
+            <span
+                className={`inline-block px-2 py-0.5 rounded text-xs font-semibold
+                    ${status === 'closed' ? 'bg-red-600 text-white' : 'bg-green-600 text-white'}`}
+            >
+                {status === 'closed' ? 'Closed' : 'Open'}
+            </span>
+        );
+    };
+
+    // Helper for time to close (in modal)
+    const getTimeToClose = (createdAt, repliedAt) => {
+        if (!createdAt || !repliedAt) return '';
+        const ms = new Date(repliedAt) - new Date(createdAt);
+        if (ms < 0) return '';
+        const minutes = Math.floor(ms / 60000);
+        const seconds = Math.floor((ms % 60000) / 1000);
+        if (minutes > 0) {
+            return `${minutes} minute${minutes > 1 ? 's' : ''}${seconds > 0 ? ` ${seconds} seconds` : ''}`;
+        }
+        return `${seconds} seconds`;
+    };
 
     return (
         <div className="relative mt-10 md:mt-0 lg:mt-0">
@@ -88,10 +138,13 @@ export default function SupportQuery() {
                                 onClick={() => handleNotificationClick(notification)}
                                 className="flex items-center justify-between p-4 bg-gray-800 shadow rounded-lg hover:bg-gray-700 transition-colors cursor-pointer"
                             >
-                                <p className="text-gray-400">
-                                    {notification.text.slice(0, 50)}...
-                                    <b> - {notification.user.firstName} {notification.user.lastName}</b>
-                                </p>
+                                <div>
+                                    <p className="text-gray-400 mb-1">
+                                        {notification.text.slice(0, 50)}...
+                                        <b> - {notification.user.firstName} {notification.user.lastName}</b>
+                                    </p>
+                                    {getStatusBadge(notification.status)}
+                                </div>
                                 <span className="text-xs text-gray-500">
                                     {new Date(notification.createdAt).toLocaleString()}
                                 </span>
@@ -147,6 +200,12 @@ export default function SupportQuery() {
                         </div>
 
                         <div className="bg-gray-700 p-4 rounded-lg mb-4">
+                            <div className="flex items-center mb-2">
+                                {getStatusBadge(selectedNotification.status)}
+                                <span className="ml-3 text-xs text-gray-400">
+                                    Submitted: {new Date(selectedNotification.createdAt).toLocaleString()}
+                                </span>
+                            </div>
                             <p className="text-white mb-4">{selectedNotification.text}</p>
 
                             {selectedNotification.imageUrl && (
@@ -165,28 +224,36 @@ export default function SupportQuery() {
                             )}
 
                             {/* Reply display */}
-                            {submittedReplies[selectedNotification._id || selectedNotification.id] && (
+                            {selectedNotification.reply && (
                                 <div className="mt-4 border-t border-gray-600 pt-4">
-                                    <p className="text-gray-400 text-sm mb-2">Your Reply:</p>
-                                    <p className="text-white mb-2">{submittedReplies[selectedNotification._id || selectedNotification.id].text}</p>
-                                    {submittedReplies[selectedNotification._id || selectedNotification.id].image && (
+                                    <p className="text-gray-400 text-sm mb-2">Reply:</p>
+                                    <p className="text-white mb-2">{selectedNotification.reply}</p>
+                                    {selectedNotification.replyImageUrl && (
                                         <div className="mt-2">
                                             <p className="text-gray-400 text-sm mb-1">Attached Image:</p>
                                             <img
-                                                src={submittedReplies[selectedNotification._id || selectedNotification.id].image}
+                                                src={selectedNotification.replyImageUrl}
                                                 alt="Attached reply"
                                                 className="max-h-48 rounded border border-gray-600"
                                             />
                                         </div>
                                     )}
                                     <p className="text-gray-400 text-xs mt-2">
-                                        Sent: {new Date(submittedReplies[selectedNotification._id || selectedNotification.id].submittedAt).toLocaleString()}
+                                        Sent: {selectedNotification.repliedAt ? new Date(selectedNotification.repliedAt).toLocaleString() : ''}
                                     </p>
+                                    {/* Time to close */}
+                                    {selectedNotification.repliedAt && (
+                                        <div className="mt-2 text-blue-400 text-xs font-semibold">
+                                            Time to close: {getTimeToClose(selectedNotification.createdAt, selectedNotification.repliedAt)}
+                                        </div>
+                                    )}
+                                    <div className="mt-2 text-green-500 font-semibold">This query is closed.</div>
                                 </div>
                             )}
                         </div>
 
-                        {!submittedReplies[selectedNotification._id || selectedNotification.id] && (
+                        {/* Reply form only if not closed and not already replied */}
+                        {!selectedNotification.reply && selectedNotification.status !== 'closed' && (
                             <div className="mt-4 space-y-4">
                                 <textarea
                                     value={replyText}
@@ -219,10 +286,10 @@ export default function SupportQuery() {
                                 <div className="flex justify-start">
                                     <button
                                         onClick={() => handleReplySubmit(selectedNotification._id || selectedNotification.id)}
-                                        disabled={!replyText.trim()}
+                                        disabled={!replyText.trim() || loadingReply}
                                         className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded disabled:opacity-50"
                                     >
-                                        Send
+                                        {loadingReply ? "Sending..." : "Send"}
                                     </button>
                                 </div>
                             </div>
@@ -245,20 +312,16 @@ export default function SupportQuery() {
                 .scrollbar-thin::-webkit-scrollbar {
                     width: 6px;
                 }
-
                 .scrollbar-thin::-webkit-scrollbar-track {
                     background: transparent;
                 }
-
                 .scrollbar-thin::-webkit-scrollbar-thumb {
                     background-color: #4b5563;
                     border-radius: 4px;
                 }
-
                 .scrollbar-thin::-webkit-scrollbar-thumb:hover {
                     background-color: #6b7280;
                 }
-
                 .scrollbar-thin {
                     scrollbar-width: thin;
                     scrollbar-color: #4b5563 transparent;
